@@ -1,0 +1,22 @@
+
+<%= link_to "back", project_path(@discussion.project) %>
+<%= link_to 'Delete Discussion', project_discussion_path(@project, @discussion), method: :delete, data: { confirm: 'Are you sure?' } %>
+<br>
+<%= alert %>
+<h1><%= @discussion.title %></h1>
+
+<p><%= @discussion.body %></p>
+
+<%= form_for [@discussion, @comment] do |f| %>
+
+
+<p>comment: <%= f.text_field :body %></p>
+<%= f.submit %>
+
+<% end %>
+<hr>
+<ul>
+  <% @comments.each do |c| %>
+  <li><%= c.body %> Created At: <%= c.created_at %>, by: <%= User.find(c.user_id).email %> <%= link_to "delete comment", discussion_comment_path(@discussion, c), method: :delete, data: {confirm: "Are you sure?"} %> </li>
+  <% end %>
+</ul>

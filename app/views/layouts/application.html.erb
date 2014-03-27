@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PmTool</title>
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <nav>
+    <h1><%= request.original_url %></h1>
+    <p><%= link_to "Home", root_path %> | 
+    <%= link_to 'New Project', new_project_path %> |   
+    <% if user_signed_in? %>
+    <%= link_to "sign out", destroy_user_session_path, method: :delete %></p>
+    <% else %>
+    <%= link_to "sign in", new_user_session_path %> | 
+        <%= link_to "register", new_user_registration_path %>
+      </p>
+    <% end %>
+  </nav>
+
+
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+
+<%= yield %>
+
+</body>
+</html>

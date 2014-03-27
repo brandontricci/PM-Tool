@@ -1,0 +1,83 @@
+<%= link_to 'Edit', edit_project_path(@project) %> |
+<%= link_to 'Back', projects_path %> | 
+<%= link_to 'Delete Project', @project, method: :delete, data: { confirm: 'Are you sure?' } %> | 
+<%= link_to 'Create Discussion', new_project_discussion_path(@project) %>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @project.title %>
+</p>
+
+<p>
+  <strong>Body:</strong>
+  <%= @project.body %>
+</p>
+
+
+
+<hr>
+<%= form_for [@project, @task] do |f| %>
+
+
+<p>task: <%= f.text_field :name %> | <%= f.date_select :date %></p>
+
+
+    <% User.all.each do |u| %>
+    <%= check_box_tag "task[user_ids][]", u.id, @task.users.include?(u.id), id: dom_id(u) %>
+    <%= label_tag dom_id(u), u.email %><br>
+    <% end %>
+
+<%= f.submit %>
+
+<% end %>
+<hr>
+<ul>
+  <% @incompleted_tasks.each do |t| %>
+    
+      <li>Pending: <%= t.name %> | created at: <%= t.created_at %>, by: <%= User.find(t.user_id).email %>, due: <%= t.date %> Assigned to:  <%= t.users.map{|x| x.email }.join(", ")  %> </li>
+          <%= form_for [@project, t] do |f| %>
+          <%= f.hidden_field :complete, value: true %>
+          <%= f.submit "Close" %>
+          <% end %> 
+     
+  <% end %>
+</ul>
+<hr>
+<ul>
+  <% @completed_tasks.each do |t| %>
+    
+      <li>Complete: <%= t.name %> | created at: <%= t.created_at %>, by: <%= User.find(t.user_id).email %>, due: <%= t.date %> Assigned to:  <%= t.users.map{|x| x.email }.join(", ")  %>
+          <%= form_for [@project, t] do |f| %>
+          <%= f.hidden_field :complete, value: false %>
+          <%= f.submit "Re-Open" %>
+          <% end %> 
+      </li>
+   
+  <% end %>
+</ul>
+
+
+
+<hr>
+
+<ul>
+  <% @project.discussions.each do |d| %>
+  <li><%= d.title %> | created by: <%= User.find(d.user_id).email %> | <%= link_to "view", project_discussion_path(@project, d) %>
+  </li>
+  <% end %>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
